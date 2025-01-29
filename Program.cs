@@ -1,105 +1,72 @@
 ﻿using System;
-
-
-class CPU
+class Shape
 {
-    public string Model { get; }
-    public int Cores { get; }
-    public double Frequency { get; } // в ГГц
+    private string color;
+    private double x, y;
 
-    public CPU(string model, int cores, double frequency)
+    public Shape(string col, double xCoord, double yCoord)
     {
-        Model = model;
-        Cores = cores;
-        Frequency = frequency;
+        color = col;
+        x = xCoord;
+        y = yCoord;
     }
 
-    public void Start()
+    public virtual void Display()
     {
-        Console.WriteLine($"CPU {Model} запущен с {Cores} ядрами и частотой {Frequency} ГГц.");
-    }
-
-    public void Shutdown()
-    {
-        Console.WriteLine("CPU выключен.");
-    }
-}
-
-class RAM
-{
-    public int Size { get; } // в ГБ
-    public int Speed { get; } // в МГц
-
-    public RAM(int size, int speed)
-    {
-        Size = size;
-        Speed = speed;
-    }
-
-    public void Load()
-    {
-        Console.WriteLine($"RAM {Size}GB загружена на {Speed} МГц.");
-    }
-
-    public void Clear()
-    {
-        Console.WriteLine("RAM очищена.");
+        Console.WriteLine($"Цвет: {color}, Координаты центра: ({x}, {y})");
     }
 }
 
 
-class GPU
+class Circle : Shape
 {
-    public string Model { get; }
-    public int Memory { get; } // в ГБ
+    private double radius;
 
-    public GPU(string model, int memory)
+    public Circle(string col, double xCoord, double yCoord, double r) : base(col, xCoord, yCoord)
     {
-        Model = model;
-        Memory = memory;
+        radius = r;
     }
 
-    public void Render()
+    public override void Display()
     {
-        Console.WriteLine($"GPU {Model} с {Memory}GB памяти выполняет рендеринг.");
-    }
-
-    public void Shutdown()
-    {
-        Console.WriteLine("GPU выключена.");
+        base.Display();
+        Console.WriteLine($"Радиус: {radius}");
     }
 }
 
 
-class Computer
+class Rectangle : Shape
 {
-    private CPU _cpu;
-    private RAM _ram;
-    private GPU _gpu;
+    private double width, height;
 
-    public Computer(CPU cpu, RAM ram, GPU gpu)
+    public Rectangle(string col, double xCoord, double yCoord, double w, double h) : base(col, xCoord, yCoord)
     {
-        _cpu = cpu;
-        _ram = ram;
-        _gpu = gpu;
+        width = w;
+        height = h;
     }
 
-    public void PowerOn()
+    public override void Display()
     {
-        Console.WriteLine("Запуск компьютера...");
-        _cpu.Start();
-        _ram.Load();
-        _gpu.Render();
-        Console.WriteLine("Компьютер включен и готов к работе!");
+        base.Display();
+        Console.WriteLine($"Ширина: {width}, Высота: {height}");
+    }
+}
+
+
+class Triangle : Shape
+{
+    private double baseLength, height;
+
+    public Triangle(string col, double xCoord, double yCoord, double b, double h) : base(col, xCoord, yCoord)
+    {
+        baseLength = b;
+        height = h;
     }
 
-    public void PowerOff()
+    public override void Display()
     {
-        Console.WriteLine("Выключение компьютера...");
-        _gpu.Shutdown();
-        _ram.Clear();
-        _cpu.Shutdown();
-        Console.WriteLine("Компьютер выключен.");
+        base.Display();
+        Console.WriteLine($"Основание: {baseLength}, Высота: {height}");
     }
 }
 
@@ -107,16 +74,15 @@ class Program
 {
     static void Main()
     {
-        CPU cpu = new CPU("Intel i7", 8, 3.6);
-        RAM ram = new RAM(16, 3200);
-        GPU gpu = new GPU("NVIDIA RTX 3080", 10);
+        Circle c = new Circle("Фиолетовый", 0, 0, 5);
+        Rectangle r = new Rectangle("Розовый", 2, 3, 4, 6);
+        Triangle t = new Triangle("Синий", -1, -1, 3, 5);
 
-        Computer pc = new Computer(cpu, ram, gpu);
-        pc.PowerOn();
-
-        Console.WriteLine("\nНажмите Enter для выключения...");
-        Console.ReadLine();
-
-        pc.PowerOff();
+        Console.WriteLine("Информация о фигурах:");
+        c.Display();
+        Console.WriteLine();
+        r.Display();
+        Console.WriteLine();
+        t.Display();
     }
 }
